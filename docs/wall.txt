@@ -1,0 +1,57 @@
+Photo Wall
+
+Create a wall of photos (like gallery in Google+) made from either photos found
+on page or provided by external services.
+
+.photoWall( [settings] )
+
+Settings:
+- row_height
+    default: 150
+
+    Height of images in rows. Real value may be slightly different in order
+    for a row to snaggly fit in space available.
+
+- getImages( callback )
+    default: undefined
+
+    A function for fetching images to add to the wall. Needs to call
+    callback function with array of found image objects. If it will be
+    called as many times as necessary until it return an empty array.
+
+    Image object has following attributes: url (image address), width and height.
+    You can also provide link_url, which will be used as destination for clicks
+    on images.
+
+    If not provided, then images will be picked only from page (NOT YET IMPLEMENTED)
+
+- buildBrick( img_obj, height, hidden )
+    default: internal function
+
+    Function to build a brick in the wall, which should contain exactly ONE
+    image with class pw-images (the one that gets resized) and attribute
+    set to 'height'.
+
+    'img_obj' is the same object provided by getImages.
+
+    Parameter 'hidden' can be used to hide element on page until it's
+    loaded by adding a .hidden class to LI element.
+
+
+Example use:
+  $("#photo-wall").photoWall({
+      getImages: getFlickrImages,
+      row_height: 150
+  })
+
+
+Notes:
+- wall is created only on first element from collection. Others are ignored
+- subsequent calls on same element trigger reflow (NOT IMPLEMENTED YET)
+- images are resized to requested row height even when they are smaller; it's up to
+  developer to provide big enough to avoid pixelation
+
+Known issues:
+- doesn't handle resizing width of a photo box (which can happen if it's sized with % and
+     page grows long enough to get a scrollbar)
+- currently creates scrollbar when not needed to prevent above problem with height:101%
